@@ -11,8 +11,8 @@
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint ."
   },
-  "engines": {
-    "node": ">=20.0.0 <=20.10.0"
+  "resolutions": {
+    "string-width": "4.2.3"
   },
   "devDependencies": {
     "@fontsource/fira-mono": "^5.0.0",
