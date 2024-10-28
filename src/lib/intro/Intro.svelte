@@ -42,6 +42,7 @@
 		style="
 			padding-top: {PADDING}px;
 			padding-bottom: {PADDING}px;
+			backface-visibility: hidden;
 			-webkit-backface-visibility: hidden;
 			-webkit-transform: perspective(1000px);
 		"
@@ -54,6 +55,7 @@
 				background-position: center;
 				background-repeat: no-repeat;
 				transform: translate3d(0, 0, 0);
+				backface-visibility: hidden;
 				-webkit-backface-visibility: hidden;
 				-webkit-transform: perspective(1000px);
 			"
@@ -67,7 +69,7 @@
 	<div
 		in:fly={{ y: 200 * multiplier, easing: quartInOut, duration: multiplier < 0 ? DEBUG_DURATION + 6800 : 0, opacity: 1 }}
 		class="flex h-full max-h-full shrink-0 {multiplier > 0 ? 'flex-col-reverse' : 'flex-col pt-80'}"
-		style="width: {screenX + PADDING * 2}px;padding-left:{PADDING}px;padding-right:{PADDING}px;-webkit-backface-visibility: hidden;"
+		style="width: {screenX + PADDING * 2}px;padding-left:{PADDING}px;padding-right:{PADDING}px;-webkit-backface-visibility: hidden;backface-visibility: hidden;"
 	>
 		{@render image(delay + 1300, multiplier)}
 		{@render image(delay + 1000, multiplier)}
@@ -90,6 +92,7 @@
 				width: calc({COLUMNS * 100}vw + {COLUMNS * PADDING * 2}px);
 				height: calc({ROWS * 100}vh + {ROWS * PADDING * 2}px);
 				will-change: transform;
+				backface-visibility: hidden;
 				-webkit-backface-visibility: hidden;
 			"
 		>
