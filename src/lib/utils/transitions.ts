@@ -1,20 +1,17 @@
 import { cubicInOut, quartInOut } from 'svelte/easing';
 
-export function scaleInFullscreen(
+export function scaleToFullscreen(
 	node: HTMLElement,
-	{ delay = 0, duration = 400, endScaleX = 100, endScaleY = 100 }
+	{ delay = 0, duration = 400, startScaleX = 10, startScaleY = 10 }
 ) {
-	const minValue = (value: number, minValue: number) => (value >= minValue ? value : minValue);
-
 	return {
 		delay,
 		duration,
 		easing: cubicInOut,
 		css: (t: number) => {
-			const startScaleX = 100;
-			const startScaleY = 100;
-			const currentScaleX = startScaleX + t * (minValue(endScaleX, 100) - startScaleX);
-			const currentScaleY = startScaleY + t * (minValue(endScaleY, 100) - startScaleY);
+			const currentScaleX = startScaleX + t * (100 - startScaleX);
+			const currentScaleY = startScaleY + t * (100 - startScaleY);
+			console.log(`transform: scale(${currentScaleX}%, ${currentScaleY}%);`);
 			return `transform: scale(${currentScaleX}%, ${currentScaleY}%);`;
 		}
 	};
