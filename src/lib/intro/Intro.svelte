@@ -1,7 +1,7 @@
 <script module lang="ts">
 	import { fly } from 'svelte/transition';
 	import { cubicInOut, quartInOut } from 'svelte/easing';
-	import bouquet from '$lib/assets/flower.webp';
+	import bouquet from '$lib/assets/bigflower.jpg';
 	import { calculateScalePercentage } from '$lib/utils/math';
 	import {backgroundSizeTransition, scaleInFullscreen} from '$lib/utils/transitions';
 
