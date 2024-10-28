@@ -8,8 +8,6 @@ export function calculateScalePercentage(dto: {
 		return null;
 	}
 
-	console.log('calc', dto.screenHeight, dto.imageHeight);
-
 	const xScale = (dto.screenWidth / dto.imageWidth) * 100;
 	const yScale = (dto.screenHeight / dto.imageHeight) * 100;
 	return { xScale, yScale };
