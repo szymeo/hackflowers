@@ -7,11 +7,13 @@
 	import { goto } from '$app/navigation';
 
 	const PLAY_INTRO_DELAY = 1300;
+	let audio: HTMLAudioElement = $state(null);
 	let { children } = $props();
 	let paused = $state(true);
 	let playingIntro = $state(dev);
 
 	onMount(() => {
+		audio.volume = 0.3;
 		if (!dev) {
 			goto('/');
 		}
@@ -21,6 +23,7 @@
 <div class="app relative flex flex-col overflow-hidden">
 	{#if !dev}
 		<audio
+			bind:this={audio}
 			src={barefoot}
 			bind:paused={paused}
 		></audio>
