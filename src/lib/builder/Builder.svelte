@@ -33,6 +33,10 @@
 
 	$effect(() => {
 		const int = setInterval(() => {
+			if (carouselHovered) {
+				return;
+			}
+
 			spinAngle += 0.001;
 		}, 1000 / 60);
 
@@ -51,6 +55,7 @@
 	});
 	let screenY = $state(0);
 	let screenX = $state(0);
+	let carouselHovered = $state(false);
 
 	let unique = $state(null);
 
@@ -65,27 +70,37 @@
 	{#if unique}
 		<div
 			in:scaleInTransition="{{ delay: 0, easing: backInOut, duration: CAROUSEL_SCALE_IN_DURATION, startScale: 0.6 }}"
-			class="absolute bg-white rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-0 h-0"
+			class="absolute bg-white rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-0 h-0 z-10"
 		>
 			{#each flowers as flower, index}
 				<div
+					onmouseenter={()=>{carouselHovered = true}}
+					onmouseleave={()=>{carouselHovered = false}}
+					role="figure"
 					in:fade|global={{ delay: 350+(index * 15), duration: DEBUG_DURATION + 250, easing: quintInOut }}
-					class="
-						bg-contain bg-no-repeat bg-center
-						shrink-0 scale-100 fixed -translate-x-1/2 -translate-y-1/2 w-32 h-32
-					"
+					class="shrink-0 scale-100 fixed -translate-x-1/2 -translate-y-1/2 w-32 h-32"
 					style="
-						background-image: url({flower});
-						left: {positions[index]?.x}px;
-						top: {positions[index]?.y}px;
+						top: {positions[index].y}px;
+						left: {positions[index].x}px;
 					"
 				>
+					<div
+						class="
+							h-full w-full
+							bg-contain bg-no-repeat bg-center
+							hover:scale-125 transition-all
+						"
+						style="
+							background-image: url({flower});
+						"
+					>
+					</div>
 				</div>
 			{/each}
 		</div>
 	{/if}
 
-	<div class="sparkles relative w-full h-full">
+	<div class="sparkles z-0 relative w-full h-full">
 		{#each Array(100) as _}
 			<div class="absolute w-0.5 h-0.5 rounded-full"></div>
 		{/each}
