@@ -7,7 +7,7 @@
 
 	const PADDING = 64;
 	const DEBUG_DURATION = 1;
-	const PHASE_1_FADEOUT_DURATION = 1500;
+	const PHASE_1_FADEOUT_DURATION = 855;
 	const COLUMNS = 5;
 	const ROWS = 5;
 	let screenY = $state(0);

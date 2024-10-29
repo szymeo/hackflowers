@@ -3,7 +3,6 @@
 	import barefoot from '$lib/assets/PPPAAA.wav';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { goto } from '$app/navigation';
 
 	const PLAY_INTRO_DELAY = 1300;
 	let { children } = $props();
@@ -11,7 +10,7 @@
 	let playingIntro = $state(false);
 
 	onMount(() => {
-		goto('/');
+		// goto('/');
 	});
 </script>
 
