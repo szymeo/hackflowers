@@ -15,3 +15,10 @@ html, body {
         transform: scale(var(--x-scale), var(--y-scale));
     }
 }
+
+@layer utilities {
+    .backface-hidden {
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+    }
+}

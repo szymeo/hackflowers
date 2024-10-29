@@ -11,8 +11,24 @@ export function scaleToFullscreen(
 		css: (t: number) => {
 			const currentScaleX = startScaleX + t * (100 - startScaleX);
 			const currentScaleY = startScaleY + t * (100 - startScaleY);
-			console.log(`transform: scale(${currentScaleX}%, ${currentScaleY}%);`);
 			return `transform: scale(${currentScaleX}%, ${currentScaleY}%);`;
+		}
+	};
+}
+
+export function scaleInTransition(
+	node: HTMLElement,
+	{ delay = 0, duration = 400, easing = cubicInOut, startScale = 0 }
+) {
+	const originalTransform = getComputedStyle(node).transform;
+
+	return {
+		delay,
+		duration,
+		easing,
+		css: (t: number) => {
+			const currentScale = startScale + t * (100 - startScale);
+			return `transform: ${originalTransform} scale(${currentScale}%);`;
 		}
 	};
 }
