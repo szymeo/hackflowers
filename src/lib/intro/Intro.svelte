@@ -19,9 +19,9 @@
 		let timeout1;
 		const timeout2 = setTimeout(() => {
 			introPhase = 1;
-			timeout1 = setTimeout(() => {
-				goto('/builder');
-			}, PHASE_1_FADEOUT_DURATION)
+			// timeout1 = setTimeout(() => {
+			// 	goto('/builder');
+			// }, PHASE_1_FADEOUT_DURATION)
 		}, 8000);
 
 		return()=> {
