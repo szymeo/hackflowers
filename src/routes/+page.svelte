@@ -11,7 +11,7 @@
 
 	let audio: HTMLAudioElement = $state(null);
 	let paused = $state(true);
-	let playingIntro = $state(dev);
+	let playingIntro = $state(!dev);
 	let stage = $state(0);
 
 	onMount(() => {
@@ -37,15 +37,15 @@
 </svelte:head>
 
 <section class="w-full h-full overflow-hidden z-20">
-	{#if !dev}
-		<audio
-			bind:this={audio}
-			src={barefoot}
-			bind:paused={paused}
-		></audio>
-	{/if}
+	<!--{#if !playingIntro}-->
+	<audio
+		bind:this={audio}
+		src={barefoot}
+		bind:paused={paused}
+	></audio>
+	<!--{/if}-->
 
-	{#if paused && !dev}
+	{#if paused && !playingIntro}
 		{#await preload(data.images)}
 			<p class="absolute left-1/2 top-1/2 text-white -translate-y-1/2 -translate-x-1/2 uppercase text-xs">
 				Loading...

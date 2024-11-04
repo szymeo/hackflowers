@@ -136,7 +136,7 @@
 		}}"
 		out:boxTransition="{{
 			delay: 0,
-			duration: initialAnimationPassed ? 500 : 1500,
+			duration: initialAnimationPassed ? 500 : 5000,
 			start: { x: 0, y: 0, width: `${windowWidth}px`, height: `${windowHeight}px` },
 			end: { x: previewDimensions.x, y: previewDimensions.y, width: previewDimensions.width, height: previewDimensions.height }
 		}}"
