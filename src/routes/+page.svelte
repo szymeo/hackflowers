@@ -7,7 +7,7 @@
 	import { onMount } from 'svelte';
 
 	const { data } = $props();
-	const PLAY_INTRO_DELAY = 1300;
+	const PLAY_INTRO_DELAY = 0;
 
 	let audio: HTMLAudioElement = $state(null);
 	let paused = $state(true);
