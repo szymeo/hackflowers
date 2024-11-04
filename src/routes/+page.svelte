@@ -11,7 +11,7 @@
 
 	let audio: HTMLAudioElement = $state(null);
 	let paused = $state(true);
-	let playingIntro = $state(!dev);
+	let playingIntro = $state(dev);
 	let stage = $state(0);
 
 	onMount(() => {
