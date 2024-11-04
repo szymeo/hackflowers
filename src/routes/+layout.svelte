@@ -13,7 +13,7 @@
 	});
 </script>
 
-<div class="app relative flex flex-col overflow-hidden">
+<div class="w-full h-full relative flex flex-col overflow-hidden">
 	{@render children()}
 
 	<div class="sparkles z-0 absolute w-full h-full">
@@ -24,11 +24,6 @@
 </div>
 
 <style lang="scss">
-    .app {
-        height: 100dvh;
-        width: 100dvw;
-    }
-
     .sparkles {
         bottom: -40px;
     }
