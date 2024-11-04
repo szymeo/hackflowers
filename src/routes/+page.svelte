@@ -46,7 +46,11 @@
 	{/if}
 
 	{#if paused && !dev}
-		{#await preload(data.images) then _}
+		{#await preload(data.images)}
+			<p class="absolute left-1/2 top-1/2 text-white -translate-y-1/2 -translate-x-1/2 uppercase text-xs">
+				Loading...
+			</p>
+		{:then _}
 			<button
 				out:fade={{ duration: PLAY_INTRO_DELAY }}
 				class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full px-6 py-3 tracking-wide font-bold w-fit uppercase text-xs"
@@ -61,8 +65,6 @@
 			</button>
 		{/await}
 	{:else if playingIntro}
-
-
 		{#if stage === 0}
 			<Intro
 				images={data.images}
