@@ -2,26 +2,24 @@
 	import { backgroundSizeTransition, scaleToFullscreen } from '$lib/utils/transitions';
 	import { fly, fade } from 'svelte/transition';
 	import { quartInOut } from 'svelte/easing';
-	import bouquet from '$lib/assets/bigflower.jpg';
-	import { goto } from '$app/navigation';
+	import { createImageMatrix } from '$lib/utils/image-matrix';
+	const { images, done } = $props();
 
 	const PADDING = 64;
 	const DEBUG_DURATION = 1;
 	const PHASE_1_FADEOUT_DURATION = 855;
 	const COLUMNS = 5;
 	const ROWS = 5;
+	const matrix = createImageMatrix(images, COLUMNS, ROWS);
 	let screenY = $state(0);
 	let screenX = $state(0);
-
 	let introPhase = $state(0);
 
 	$effect(() => {
 		let timeout1;
 		const timeout2 = setTimeout(() => {
 			introPhase = 1;
-			// timeout1 = setTimeout(() => {
-			// 	goto('/builder');
-			// }, PHASE_1_FADEOUT_DURATION)
+			done?.();
 		}, 8000);
 
 		return()=> {
@@ -33,11 +31,10 @@
 
 <svelte:window bind:innerHeight={screenY} bind:innerWidth={screenX} />
 
-{#snippet image(delay = 0, multiplier = 1, primaryAnimation = false)}
+{#snippet image(url, delay = 0, multiplier = 1, primaryAnimation = false)}
 	<div
 		in:fly={{ y: screenY * ROWS * multiplier, easing: quartInOut, delay, duration: DEBUG_DURATION + 4500, opacity: 1 }}
-		out:fade={{ duration: primaryAnimation ? PHASE_1_FADEOUT_DURATION : 0 }}
-		class={"flex items-center z-10 shrink-0 backface-hidden will-change-transform"}
+		class={"flex items-center z-20 shrink-0 backface-hidden will-change-transform"}
 		style="
 			padding-top: {PADDING}px;
 			padding-bottom: {PADDING}px;
@@ -47,7 +44,7 @@
 		<div
 			in:backgroundSizeTransition={{ delay: 2500, duration: primaryAnimation ? DEBUG_DURATION + 6050 : 0 }}
 			style="
-				background-image: url({bouquet});
+				background-image: url({url});
 				transform: translate3d(0, 0, 0);
 				-webkit-transform: perspective(1000px);
 			"
@@ -57,21 +54,21 @@
 	</div>
 {/snippet}
 
-{#snippet imagesColumn(delay = 0, multiplier = 1, imageScaledTo = false)}
+{#snippet imagesColumn(index, delay = 0, multiplier = 1, imageScaledTo = false)}
 	<div
 		in:fly={{ y: 200 * multiplier, easing: quartInOut, duration: multiplier < 0 ? DEBUG_DURATION + 6800 : 0, opacity: 1 }}
 		class="flex will-change-transform backface-hidden h-full max-h-full shrink-0 {multiplier > 0 ? 'flex-col-reverse' : 'flex-col pt-80'}"
 		style="width: {screenX + PADDING * 2}px;padding-left:{PADDING}px;padding-right:{PADDING}px;"
 	>
-		{@render image(delay + 1300, multiplier)}
-		{@render image(delay + 1000, multiplier)}
-		{@render image(delay + 900, multiplier, imageScaledTo && true)}
-		{@render image(delay + 600, multiplier)}
-		{@render image(delay, multiplier)}
+		{@render image(matrix[index][0], delay + 1300, multiplier)}
+		{@render image(matrix[index][1], delay + 1000, multiplier)}
+		{@render image(matrix[index][2], delay + 900, multiplier, imageScaledTo && true)}
+		{@render image(matrix[index][3], delay + 600, multiplier)}
+		{@render image(matrix[index][4], delay, multiplier)}
 	</div>
 {/snippet}
 
-<div class="w-screen h-screen overflow-hidden">
+<div class="w-screen h-screen overflow-hidden z-20">
 	{#if introPhase === 0 && screenX && screenY}
 		<div
 			in:scaleToFullscreen="{{ delay: 2000, duration: DEBUG_DURATION + 6100, startScaleX: 25, startScaleY: 25 }}"
@@ -84,11 +81,11 @@
 				height: calc({ROWS * 100}vh + {ROWS * PADDING * 2}px);
 			"
 		>
-			{@render imagesColumn(100 + 300)}
-			{@render imagesColumn(100 + 150, -1)}
-			{@render imagesColumn(0, 1, true)}
-			{@render imagesColumn(100 + 150, -1)}
-			{@render imagesColumn(100 + 300)}
+			{@render imagesColumn(0, 100 + 300)}
+			{@render imagesColumn(1, 100 + 150, -1)}
+			{@render imagesColumn(2, 0, 1, true)}
+			{@render imagesColumn(3, 100 + 150, -1)}
+			{@render imagesColumn(4, 100 + 300)}
 		</div>
 	{/if}
 </div>

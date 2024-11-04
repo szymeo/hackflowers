@@ -48,7 +48,7 @@
 		{@render children()}
 	{/if}
 
-	<div class="sparkles z-0 relative w-full h-full">
+	<div class="sparkles z-0 absolute w-full h-full">
 		{#each Array(100) as _}
 			<div class="absolute w-0.5 h-0.5 rounded-full"></div>
 		{/each}
