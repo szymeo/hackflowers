@@ -30,7 +30,8 @@ export default ts.config(
 	{
 		ignores: ['build/', '.svelte-kit/', 'dist/'],
 		rules: {
-			'@typescript-eslint/no-explicit-any': 'off'
+			'@typescript-eslint/no-explicit-any': 'off',
+			'a11y-click-events-have-key-events': 'off',
 		}
 	}
 );

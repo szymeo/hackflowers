@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { type Image } from '$lib/shared/types/image.model';
 	import Intro from '$lib/intro/Intro.svelte';
 	import Browser from '$lib/browser/Browser.svelte';
 	import { dev } from '$app/environment';
@@ -11,7 +12,7 @@
 
 	let audio: HTMLAudioElement = $state(null);
 	let paused = $state(true);
-	let playingIntro = $state(dev);
+	let playingIntro = $state(!dev);
 	let stage = $state(0);
 
 	onMount(() => {
@@ -20,14 +21,22 @@
 		}
 	});
 
-	function preload(sources: string[]) {
-		return Promise.all(sources.map(src => {
-			return new Promise(resolve => {
-				const img = new Image();
-				img.src = src;
-				img.onload = resolve;
-			});
-		}));
+	function preload(sources: string[]): Promise<Image[]> {
+		return Promise.all(
+			sources.map((src): Promise<Image> => {
+				return new Promise((resolve) => {
+					const img = new Image();
+					img.src = src;
+					img.onload = function () {
+						resolve({
+							src,
+							width: img.width,
+							height: img.height
+						});
+					};
+				});
+			})
+		);
 	}
 </script>
 
@@ -38,19 +47,17 @@
 
 <section class="w-full h-full overflow-hidden z-20">
 	<!--{#if !playingIntro}-->
-	<audio
-		bind:this={audio}
-		src={barefoot}
-		bind:paused={paused}
-	></audio>
+	<audio bind:this={audio} src={barefoot} bind:paused></audio>
 	<!--{/if}-->
 
-	{#if paused && !playingIntro}
-		{#await preload(data.images)}
-			<p class="absolute left-1/2 top-1/2 text-white -translate-y-1/2 -translate-x-1/2 uppercase text-xs">
-				Loading...
-			</p>
-		{:then _}
+	{#await preload(data.images)}
+		<p
+			class="absolute left-1/2 top-1/2 text-white -translate-y-1/2 -translate-x-1/2 uppercase text-xs"
+		>
+			Loading...
+		</p>
+	{:then images}
+		{#if paused && !playingIntro}
 			<button
 				out:fade={{ duration: PLAY_INTRO_DELAY }}
 				class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full px-6 py-3 tracking-wide font-bold w-fit uppercase text-xs"
@@ -63,23 +70,23 @@
 			>
 				start
 			</button>
-		{/await}
-	{:else if playingIntro}
-		{#if stage === 0}
-			<Intro
-				images={data.images}
-				done={() => {
-				stage = 1;
-			}}
-			/>
-		{:else if stage === 1}
-			<Browser
-				startMaximized={true}
-				images={data.images}
-				done={() => {
-				stage = 2;
-			}}
-			/>
+		{:else if playingIntro}
+			{#if stage === 0}
+				<Intro
+					{images}
+					done={() => {
+						stage = 1;
+					}}
+				/>
+			{:else if stage === 1}
+				<Browser
+					startMaximized={true}
+					{images}
+					done={() => {
+						stage = 2;
+					}}
+				/>
+			{/if}
 		{/if}
-	{/if}
+	{/await}
 </section>

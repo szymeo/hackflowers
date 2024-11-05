@@ -1,53 +1,49 @@
 <script lang="ts">
-import { cls } from 'svelte-ux';
+	import type { Coords } from '$lib/shared/types/coords.model';
+	import { cls } from 'svelte-ux';
 
-const {
-	onclick,
-	src,
-	class: className,
-	backgroundOffset,
-} = $props();
-
-type Coords = {
-	x: number;
-	y: number;
-}
-
-let el: HTMLDivElement | null = $state(null);
-let startXY: Coords = { x: 0, y: 0 };
-let distance: Coords = { x: 0, y: 0 };
-
-function onPointerDown(event) {
-	event.preventDefault();
-
-	startXY = {
-		x: event.clientX,
-		y: event.clientY,
+	type Props = {
+		onclick?: (event: MouseEvent) => void;
+		src: string;
+		class?: string;
+		backgroundOffset: number;
 	};
-	el.addEventListener('pointermove', onPointerMove);
-	el.addEventListener('pointerup', onPointerUp);
-}
+	const { onclick, src, class: className, backgroundOffset }: Props = $props();
 
-function onPointerMove(event) {
-	event.preventDefault();
-	distance = {
-		x: event.clientX - startXY.x,
-		y: event.clientY - startXY.y,
-	};
-}
+	let el: HTMLDivElement | null = $state(null);
+	let startXY: Coords = { x: 0, y: 0 };
+	let distance: Coords = { x: 0, y: 0 };
 
-function onPointerUp(event) {
-	event.preventDefault();
+	function onPointerDown(event) {
+		event.preventDefault();
 
-	if (Math.abs(distance.x) > 10 || Math.abs(distance.y) > 10) {
-		distance = { x: 0, y: 0 };
-		return;
+		startXY = {
+			x: event.clientX,
+			y: event.clientY
+		};
+		el.addEventListener('pointermove', onPointerMove);
+		el.addEventListener('pointerup', onPointerUp);
 	}
 
-	distance = { x: 0, y: 0 };
-	onclick?.(event);
-}
+	function onPointerMove(event) {
+		event.preventDefault();
+		distance = {
+			x: event.clientX - startXY.x,
+			y: event.clientY - startXY.y
+		};
+	}
 
+	function onPointerUp(event) {
+		event.preventDefault();
+
+		if (Math.abs(distance.x) > 10 || Math.abs(distance.y) > 10) {
+			distance = { x: 0, y: 0 };
+			return;
+		}
+
+		distance = { x: 0, y: 0 };
+		onclick?.(event);
+	}
 </script>
 
 <div

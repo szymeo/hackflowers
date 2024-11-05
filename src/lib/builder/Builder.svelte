@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { scaleInTransition } from '$lib/utils/transitions';
+	import { scaleInTransition } from '$lib/shared/utils/transitions';
 	import flower1 from '$lib/assets/carousel/flower1.png';
 	import flower2 from '$lib/assets/carousel/flower2.png';
 	import flower3 from '$lib/assets/carousel/flower3.png';

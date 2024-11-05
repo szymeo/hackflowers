@@ -1,16 +1,23 @@
 <script lang="ts">
-	import { backgroundSizeTransition, scaleToFullscreen } from '$lib/utils/transitions';
+	import { backgroundSizeTransition, scaleToFullscreen } from '$lib/shared/utils/transitions';
 	import { fly, fade } from 'svelte/transition';
 	import { quartInOut } from 'svelte/easing';
-	import { createImageMatrix } from '$lib/utils/image-matrix';
-	const { images, done } = $props();
+	import { createImageMatrix as buildMatrix } from '$lib/shared/utils/image-matrix';
+	import type { Image } from '$lib/shared/types/image.model';
+
+	type Props = {
+		images: Image[];
+		done?: () => void;
+	}
+
+	const { images, done }: Props = $props();
 
 	const PADDING = 64;
 	const DEBUG_DURATION = 1;
 	const PHASE_1_FADEOUT_DURATION = 855;
 	const COLUMNS = 5;
 	const ROWS = 5;
-	const matrix = createImageMatrix(images, COLUMNS, ROWS);
+	const matrix = buildMatrix<Image>(images, COLUMNS, ROWS);
 	let screenY = $state(0);
 	let screenX = $state(0);
 	let introPhase = $state(0);
@@ -31,7 +38,7 @@
 
 <svelte:window bind:innerHeight={screenY} bind:innerWidth={screenX} />
 
-{#snippet image(url, delay = 0, multiplier = 1, primaryAnimation = false)}
+{#snippet image(url: string, delay = 0, multiplier = 1, primaryAnimation = false)}
 	<div
 		in:fly={{ y: screenY * ROWS * multiplier, easing: quartInOut, delay, duration: DEBUG_DURATION + 4500, opacity: 1 }}
 		class={"flex items-center z-20 shrink-0 backface-hidden will-change-transform"}
@@ -42,7 +49,12 @@
 		"
 	>
 		<div
-			in:backgroundSizeTransition={{ delay: 2500, duration: primaryAnimation ? DEBUG_DURATION + 6050 : 0 }}
+			in:backgroundSizeTransition={{
+				delay: 2500,
+				duration: primaryAnimation ? DEBUG_DURATION + 6050 : 0,
+				windowWidth: screenX,
+				windowHeight: screenY
+			}}
 			style="
 				background-image: url({url});
 				transform: translate3d(0, 0, 0);
@@ -60,11 +72,11 @@
 		class="flex will-change-transform backface-hidden h-full max-h-full shrink-0 {multiplier > 0 ? 'flex-col-reverse' : 'flex-col pt-80'}"
 		style="width: {screenX + PADDING * 2}px;padding-left:{PADDING}px;padding-right:{PADDING}px;"
 	>
-		{@render image(matrix[index][0], delay + 1300, multiplier)}
-		{@render image(matrix[index][1], delay + 1000, multiplier)}
-		{@render image(matrix[index][2], delay + 900, multiplier, imageScaledTo && true)}
-		{@render image(matrix[index][3], delay + 600, multiplier)}
-		{@render image(matrix[index][4], delay, multiplier)}
+		{@render image(matrix[index][0].src, delay + 1300, multiplier)}
+		{@render image(matrix[index][1].src, delay + 1000, multiplier)}
+		{@render image(matrix[index][2].src, delay + 900, multiplier, imageScaledTo && true)}
+		{@render image(matrix[index][3].src, delay + 600, multiplier)}
+		{@render image(matrix[index][4].src, delay, multiplier)}
 	</div>
 {/snippet}
 
