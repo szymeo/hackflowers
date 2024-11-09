@@ -25,6 +25,7 @@
 	let initialAnimationPassed = $state(!startMaximized);
 	let track: HTMLDivElement = $state(null);
 	let selectedIndex = $state(startMaximized ? 0 : null);
+	let lastSelectedIndex = $state(null);
 	let windowWidth = $state(null);
 	let windowHeight = $state(null);
 	let imageBrowserOffset = $state(0);
@@ -108,6 +109,12 @@
 		}
 	});
 
+	$effect(() => {
+		if (selectedIndex !== null && lastSelectedIndex !== selectedIndex) {
+			lastSelectedIndex = selectedIndex;
+		}
+	});
+
 	onMount(() => {
 		setTimeout(() => {
 			if (startMaximized) {
@@ -124,6 +131,18 @@
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
+
+<!-- {#if previewDimensions}
+	<div
+		style="
+		position: fixed;z-index:999;background-color:red;
+		width:{previewDimensions.width}px;
+		height:{previewDimensions.height}px;
+		left:{previewDimensions.x}px;
+		top:{previewDimensions.y}px;
+	"
+	></div>
+{/if} -->
 
 {#if selectedIndex !== null && previewDimensions}
 	<div
@@ -147,7 +166,7 @@
 		}}
 		out:boxTransition={{
 			delay: 0,
-			duration: initialAnimationPassed ? 500 : 5000,
+			duration: initialAnimationPassed ? 600 : 5000,
 			start: {
 				x: 0,
 				y: 0,
@@ -162,6 +181,12 @@
 				height: previewDimensions.height,
 				backgroundXPosition: imageBrowserOffset
 			}
+		}}
+		onintrostart={() => (galleryPreviewAnimating = true)}
+		onoutrostart={() => (galleryPreviewAnimating = true)}
+		onintroend={() => (galleryPreviewAnimating = false)}
+		onoutroend={() => {
+			galleryPreviewAnimating = false;
 		}}
 		style={switchCase({
 			true: 'left: 0; top: 0; width: 100vw; height: 100vh;background-position: center center;',

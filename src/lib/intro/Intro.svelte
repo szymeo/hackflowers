@@ -8,7 +8,7 @@
 	type Props = {
 		images: Image[];
 		done?: () => void;
-	}
+	};
 
 	const { images, done }: Props = $props();
 
@@ -29,19 +29,25 @@
 			done?.();
 		}, 8000);
 
-		return()=> {
+		return () => {
 			clearTimeout(timeout1);
 			clearTimeout(timeout2);
-		}
+		};
 	});
 </script>
 
 <svelte:window bind:innerHeight={screenY} bind:innerWidth={screenX} />
 
-{#snippet image(url: string, delay = 0, multiplier = 1, primaryAnimation = false)}
+{#snippet image(image: Image, delay = 0, multiplier = 1, primaryAnimation = false)}
 	<div
-		in:fly={{ y: screenY * ROWS * multiplier, easing: quartInOut, delay, duration: DEBUG_DURATION + 4500, opacity: 1 }}
-		class={"flex items-center z-20 shrink-0 backface-hidden will-change-transform"}
+		in:fly={{
+			y: screenY * ROWS * multiplier,
+			easing: quartInOut,
+			delay,
+			duration: DEBUG_DURATION + 4500,
+			opacity: 1
+		}}
+		class={'flex items-center z-20 shrink-0 backface-hidden will-change-transform'}
 		style="
 			padding-top: {PADDING}px;
 			padding-bottom: {PADDING}px;
@@ -53,42 +59,55 @@
 				delay: 2500,
 				duration: primaryAnimation ? DEBUG_DURATION + 6050 : 0,
 				windowWidth: screenX,
-				windowHeight: screenY
+				windowHeight: screenY,
+				imageWidth: image.width,
+				imageHeight: image.height
 			}}
 			style="
-				background-image: url({url});
+				background-image: url({image.src});
 				transform: translate3d(0, 0, 0);
 				-webkit-transform: perspective(1000px);
 			"
 			class="w-screen h-screen pointer-events-none shrink-0 text-8xl text-white bg-cover bg-center bg-no-repeat will-change-auto"
-		>
-		</div>
+		></div>
 	</div>
 {/snippet}
 
 {#snippet imagesColumn(index, delay = 0, multiplier = 1, imageScaledTo = false)}
 	<div
-		in:fly={{ y: 200 * multiplier, easing: quartInOut, duration: multiplier < 0 ? DEBUG_DURATION + 6800 : 0, opacity: 1 }}
-		class="flex will-change-transform backface-hidden h-full max-h-full shrink-0 {multiplier > 0 ? 'flex-col-reverse' : 'flex-col pt-80'}"
+		in:fly={{
+			y: 200 * multiplier,
+			easing: quartInOut,
+			duration: multiplier < 0 ? DEBUG_DURATION + 6800 : 0,
+			opacity: 1
+		}}
+		class="flex will-change-transform backface-hidden h-full max-h-full shrink-0 {multiplier > 0
+			? 'flex-col-reverse'
+			: 'flex-col pt-80'}"
 		style="width: {screenX + PADDING * 2}px;padding-left:{PADDING}px;padding-right:{PADDING}px;"
 	>
-		{@render image(matrix[index][0].src, delay + 1300, multiplier)}
-		{@render image(matrix[index][1].src, delay + 1000, multiplier)}
-		{@render image(matrix[index][2].src, delay + 900, multiplier, imageScaledTo && true)}
-		{@render image(matrix[index][3].src, delay + 600, multiplier)}
-		{@render image(matrix[index][4].src, delay, multiplier)}
+		{@render image(matrix[index][0], delay + 1300, multiplier)}
+		{@render image(matrix[index][1], delay + 1000, multiplier)}
+		{@render image(matrix[index][2], delay + 900, multiplier, imageScaledTo && true)}
+		{@render image(matrix[index][3], delay + 600, multiplier)}
+		{@render image(matrix[index][4], delay, multiplier)}
 	</div>
 {/snippet}
 
 <div class="w-screen h-screen overflow-hidden z-20">
 	{#if introPhase === 0 && screenX && screenY}
 		<div
-			in:scaleToFullscreen="{{ delay: 2000, duration: DEBUG_DURATION + 6100, startScaleX: 25, startScaleY: 25 }}"
+			in:scaleToFullscreen={{
+				delay: 2000,
+				duration: DEBUG_DURATION + 6100,
+				startScaleX: 25,
+				startScaleY: 25
+			}}
 			class="flex absolute will-change-transform backface-hidden"
 			style="
-				left: calc(-1 * ({(COLUMNS * 40)}% + {(COLUMNS) * PADDING}px));
+				left: calc(-1 * ({COLUMNS * 40}% + {COLUMNS * PADDING}px));
 				transform: scale(100%, 100%);
-				top: calc(-1 * ({(ROWS * 40)}% + {(ROWS) * PADDING}px));
+				top: calc(-1 * ({ROWS * 40}% + {ROWS * PADDING}px));
 				width: calc({COLUMNS * 100}vw + {COLUMNS * PADDING * 2}px);
 				height: calc({ROWS * 100}vh + {ROWS * PADDING * 2}px);
 			"

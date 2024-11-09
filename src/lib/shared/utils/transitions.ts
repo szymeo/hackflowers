@@ -35,11 +35,20 @@ export function scaleInTransition(
 
 export function backgroundSizeTransition(
 	node: HTMLElement,
-	{ delay = 0, duration = 400, from = '250', to = '200', windowWidth, windowHeight }
+	{
+		delay = 0,
+		duration = 400,
+		from = '250',
+		to = '200',
+		windowWidth,
+		windowHeight,
+		imageWidth,
+		imageHeight
+	}
 ) {
 	const imageDimensions = {
-		width: 1770,
-		height: 1180
+		width: imageWidth,
+		height: imageHeight
 	};
 	const imgRatio = imageDimensions.height / imageDimensions.width;
 	const containerRatio = windowHeight / windowWidth;
@@ -96,11 +105,6 @@ export function boxTransition(
 		easing,
 		css: (t) => {
 			if (parseFloat(startWidth) < parseFloat(endWidth)) {
-				console.log(
-					start.backgroundXPosition +
-						(end.backgroundXPosition - start.backgroundXPosition) * t
-				);
-
 				return `
 						transform: translate(${startX + (endX - startX) * t}px, ${startY + (endY - startY) * t}px);
 						width: ${parseFloat(startWidth) + (parseFloat(endWidth) - parseFloat(startWidth)) * t}px;
@@ -114,12 +118,14 @@ export function boxTransition(
 						end.backgroundXPosition +
 						(start.backgroundXPosition - end.backgroundXPosition) * t;
 				} else {
-					console.log('bep', start.backgroundXPosition, end.backgroundXPosition);
-
 					backgroundXPosition =
 						start.backgroundXPosition +
 						(end.backgroundXPosition - start.backgroundXPosition) * t;
 				}
+
+				console.log(
+					`height: ${parseFloat(endHeight) + t * (parseFloat(startHeight) - parseFloat(endHeight))}px;`
+				);
 
 				return `
 						transform: translate(${endX + (startX - endX) * t}px, ${endY + (startY - endY) * t}px);

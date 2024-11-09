@@ -8,7 +8,8 @@ export default {
 	theme: {
 		extend: {
 			scale: {
-				200: '2'
+				200: '2',
+				25: '.25'
 			}
 		}
 	},
