@@ -182,12 +182,6 @@
 				backgroundXPosition: imageBrowserOffset
 			}
 		}}
-		onintrostart={() => (galleryPreviewAnimating = true)}
-		onoutrostart={() => (galleryPreviewAnimating = true)}
-		onintroend={() => (galleryPreviewAnimating = false)}
-		onoutroend={() => {
-			galleryPreviewAnimating = false;
-		}}
 		style={switchCase({
 			true: 'left: 0; top: 0; width: 100vw; height: 100vh;background-position: center center;',
 			false: `left: ${previewDimensions.x}px; top: ${previewDimensions.y}px; width: ${previewDimensions.width}px; height: ${previewDimensions.height}px;background-position: ${imageBrowserOffset}% center;`
